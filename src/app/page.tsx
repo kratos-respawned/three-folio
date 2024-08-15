@@ -146,7 +146,7 @@ export default async function Home() {
               </p>
             </div>
           </div>
-          <div className="mt-12 grid grid-cols-2 gap-2">
+          <div className="mt-12 grid sm:grid-cols-2 gap-2">
             {projects.length === 0 && (
               <p className="text-muted-foreground">No projects found</p>
             )}

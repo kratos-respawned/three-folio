@@ -19,7 +19,7 @@ export const ProjectCard = ({
   return (
     <Link href={`/projects/${id}`} className="block cursor-pointer">
       <Card className="overflow-hidden aspect-[4/3] max-w-2xl w-full  relative group">
-        <Image src={mainImage} alt="test"  className="object-cover  object-center" fill  />
+        <Image src={mainImage} alt="test"  className="object-cover object-center" fill  />
 
         <div className="absolute grid items-end px-3 pb-3  bg-gradient-to-t from-black/65 inset-0 text-white">
           <div>

@@ -1,4 +1,3 @@
-import { buttonVariants } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
@@ -31,19 +30,16 @@ export default function RootLayout({
         className={cn(
           "min-h-screen bg-background text-foreground relative h-full font-sans antialiased max-w-2xl mx-auto py-12 sm:py-24 px-6",
           geistSans.variable,
-        geistMono.variable
+          geistMono.variable
         )}
       >
         {children}
         <Toaster />
-        <footer className="absolute left-1/2 -translate-x-1/2  mx-auto  bottom-4">
-          Made with ❤️ by{" "}
+        <footer className="absolute flex flex-col items-center  justify-center left-1/2 w-fit -translate-x-1/2  mx-auto  bottom-4">
+          <p>Made with ❤️</p>
           <Link
-            className={cn(
-              buttonVariants({ variant: "link" }),
-              "text-blue-500 pl-0"
-            )}
             target="_blank"
+            className="text-blue-500 hover:underline"
             referrerPolicy="no-referrer"
             href="https://x.com/kratosRespawned"
           >

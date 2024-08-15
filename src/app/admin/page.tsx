@@ -2,12 +2,12 @@ import { DeleteButton } from "@/components/delete-project-button";
 import { NewProject } from "@/components/new-project";
 import { ProjectCard } from "@/components/project-card";
 import {
-    Breadcrumb,
-    BreadcrumbItem,
-    BreadcrumbLink,
-    BreadcrumbList,
-    BreadcrumbPage,
-    BreadcrumbSeparator,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { env } from "@/env";
 import { db } from "@/lib/db";
@@ -28,7 +28,7 @@ const Admin = async ({
     },
   });
   return (
-    <main className=" w-full ">
+    <main className=" w-full pb-12 ">
       <header className="w-full">
         <Breadcrumb>
           <BreadcrumbList>
@@ -59,7 +59,7 @@ const Admin = async ({
           <h4 className="text-2xl font-semibold">Projects</h4>
           <NewProject token={searchParams.token} />
         </div>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid sm:grid-cols-2 gap-4 sm:gap-2 pt-5">
           {projects.length === 0 && (
             <p className="text-muted-foreground">No projects found</p>
           )}

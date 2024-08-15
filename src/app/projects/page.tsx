@@ -18,7 +18,7 @@ const Projects = async () => {
     },
   });
   return (
-    <main className=" ">
+    <main className=" pb-11 ">
       <header>
         <Breadcrumb>
           <BreadcrumbList>
@@ -37,7 +37,7 @@ const Projects = async () => {
       <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl pt-3">
         Projects
       </h2>
-      <section className="mt-12 grid grid-cols-2 gap-2">
+      <section className="mt-12 grid sm:grid-cols-2 gap-2">
         {projects.length === 0 && (
           <p className="text-muted-foreground">No projects found</p>
         )}

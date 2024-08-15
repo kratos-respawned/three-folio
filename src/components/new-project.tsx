@@ -67,6 +67,8 @@ export function NewProject({ token }: { token: string }) {
       toast.error("Error", saveError.message);
       return;
     }
+    form.reset();
+    setDialogOpen(false);
     toast.success("Success", "Images uploaded successfully");
   };
   const [dialogOpen, setDialogOpen] = useState(false);

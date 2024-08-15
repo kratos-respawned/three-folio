@@ -47,7 +47,7 @@ const Project = async ({ params }: { params: { id: string | undefined } }) => {
     notFound();
   }
   return (
-    <main className=" ">
+    <main className="pb-12 ">
       <header>
         <Breadcrumb>
           <BreadcrumbList>
@@ -85,7 +85,7 @@ const Project = async ({ params }: { params: { id: string | undefined } }) => {
             fill
           />
         </div>
-        <div className="grid-cols-2 grid gap-3">
+        <div className="sm:grid-cols-2 grid gap-3">
           {project.images
             .filter((image) => image.thumbnail !== project.mainImage)
             .map((image) => (
@@ -102,7 +102,7 @@ const Project = async ({ params }: { params: { id: string | undefined } }) => {
         </div>
       </section>
       <hr />
-      <section className="py-6 space-y-6">
+      <section className="py-6  space-y-6">
         <div className="flex justify-between items-center">
           <h3 className="text-3xl font-bold">More Projects</h3>
           <Link
@@ -116,7 +116,7 @@ const Project = async ({ params }: { params: { id: string | undefined } }) => {
             <ChevronRight className="size-4 group-hover:translate-x-1.5 transition-transform" />
           </Link>
         </div>
-
+        <div className="px-12">
         <Carousel
           opts={{
             align: "start",
@@ -127,7 +127,7 @@ const Project = async ({ params }: { params: { id: string | undefined } }) => {
             {moreProjects
               .filter((p) => p.id !== project.id)
               .map((p) => (
-                <CarouselItem key={p.id} className="basis-1/2">
+                <CarouselItem key={p.id} className="sm:basis-1/2">
                   <ProjectCard {...p} />
                 </CarouselItem>
               ))}
@@ -135,6 +135,7 @@ const Project = async ({ params }: { params: { id: string | undefined } }) => {
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
+        </div>
       </section>
     </main>
   );
