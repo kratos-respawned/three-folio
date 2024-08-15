@@ -4,14 +4,39 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbo",
+    "slow": "next dev ",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.9.0",
+    "@libsql/client": "^0.9.0",
+    "@prisma/client": "5.18.0",
+    "@radix-ui/react-avatar": "^1.1.0",
+    "@radix-ui/react-dialog": "^1.1.1",
+    "@radix-ui/react-icons": "^1.3.0",
+    "@radix-ui/react-label": "^2.1.0",
+    "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-toast": "^1.2.1",
+    "@t3-oss/env-nextjs": "^0.11.0",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "embla-carousel-react": "^8.1.8",
+    "imagekit": "^5.1.0",
+    "jiti": "^1.21.6",
+    "lucide-react": "^0.427.0",
+    "next": "15.0.0-rc.0",
+    "prisma": "^5.18.0",
     "react": "19.0.0-rc-f994737d14-20240522",
     "react-dom": "19.0.0-rc-f994737d14-20240522",
-    "next": "15.0.0-rc.0"
+    "react-hook-form": "^7.52.2",
+    "server-only": "^0.0.1",
+    "tailwind-merge": "^2.5.2",
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.23.8",
+    "zsa": "^0.5.1",
+    "zsa-react": "^0.2.2"
   },
   "devDependencies": {
     "typescript": "^5",
@@ -22,5 +47,6 @@
     "tailwindcss": "^3.4.1",
     "eslint": "^8",
     "eslint-config-next": "15.0.0-rc.0"
-  }
+  },
+  "packageManager": "bun@1.1.24"
 }
