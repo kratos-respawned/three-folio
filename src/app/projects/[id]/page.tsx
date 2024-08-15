@@ -18,13 +18,40 @@ import {
 import { db } from "@/lib/db";
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
+import { Metadata, ResolvingMetadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+export async function generateMetadata(
+  { params }: { params: { id: string | undefined } },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const id = params.id;
 
+  // fetch data
+  const project = await db.project.findUnique({
+    where: {
+      id: params.id || "",
+    },
+    include: {
+      images: true,
+    },
+  });
+
+  const images =
+    project?.images.map((image) => ({
+      url: image.imageUrl,
+    })) || [];
+
+  return {
+    title: project?.name || "Project",
+    description: project?.description || "Project description",
+    openGraph: {
+      images: [...images],
+    },
+  };
+}
 const Project = async ({ params }: { params: { id: string | undefined } }) => {
-  const id = params["id"];
-  console.log(id);
   const projectPromise = db.project.findUnique({
     where: {
       id: params.id || "",
@@ -117,24 +144,24 @@ const Project = async ({ params }: { params: { id: string | undefined } }) => {
           </Link>
         </div>
         <div className="px-12">
-        <Carousel
-          opts={{
-            align: "start",
-          }}
-          className="w-full "
-        >
-          <CarouselContent>
-            {moreProjects
-              .filter((p) => p.id !== project.id)
-              .map((p) => (
-                <CarouselItem key={p.id} className="sm:basis-1/2">
-                  <ProjectCard {...p} />
-                </CarouselItem>
-              ))}
-          </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
-        </Carousel>
+          <Carousel
+            opts={{
+              align: "start",
+            }}
+            className="w-full "
+          >
+            <CarouselContent>
+              {moreProjects
+                .filter((p) => p.id !== project.id)
+                .map((p) => (
+                  <CarouselItem key={p.id} className="sm:basis-1/2">
+                    <ProjectCard {...p} />
+                  </CarouselItem>
+                ))}
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
+          </Carousel>
         </div>
       </section>
     </main>

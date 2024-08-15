@@ -60,7 +60,7 @@ export const CreateProjectAction = createServerAction()
         data: {
           name: input.name,
           description: input.description,
-          mainImage: input.images[0].thumbnailUrl,
+          mainImage: input.images[0].url,
           images: {
             createMany: {
               data: [...images],

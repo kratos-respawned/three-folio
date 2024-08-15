@@ -8,9 +8,15 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { db } from "@/lib/db";
+import { Metadata } from "next";
 import Link from "next/link";
 export const dynamic="auto"
 export const revalidate=3600
+export const metadata: Metadata = {
+  title: 'Projects | Deepak Bhandari',
+  description: 'A collection of projects I have worked on',
+}
+ 
 const Projects = async () => {
   const projects = await db.project.findMany({
     orderBy: {
