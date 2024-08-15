@@ -9,7 +9,8 @@ import {
 } from "@/components/ui/breadcrumb";
 import { db } from "@/lib/db";
 import Link from "next/link";
-
+export const dynamic="auto"
+export const revalidate=3600
 const Projects = async () => {
   const projects = await db.project.findMany({
     orderBy: {

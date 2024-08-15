@@ -7,7 +7,8 @@ import { db } from "@/lib/db";
 import { cn } from "@/lib/utils";
 import { FileVideo, Library, Youtube } from "lucide-react";
 import Link from "next/link";
-
+export const dynamic="auto"
+export const revalidate=3600
 export default async function Home() {
   const projects = await db.project.findMany({
     take: 4,
