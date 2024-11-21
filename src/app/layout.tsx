@@ -28,7 +28,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "min-h-screen bg-background text-foreground overflow-hidden w-full relative h-full font-sans antialiased max-w-2xl mx-auto pt-12 sm:pt-24 px-6",
+          "min-h-screen bg-background text-foreground  w-full relative h-full font-sans antialiased max-w-2xl mx-auto pt-12 sm:pt-24 px-6",
           geistSans.variable,
           geistMono.variable
         )}
