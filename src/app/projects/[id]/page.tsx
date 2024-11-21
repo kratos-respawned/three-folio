@@ -18,26 +18,32 @@ import {
 import { db } from "@/lib/db";
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
-import { Metadata, ResolvingMetadata } from "next";
+
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-export async function generateMetadata(
-  { params }: { params: { id: string | undefined } },
-  parent: ResolvingMetadata
-): Promise<Metadata> {
-  const id = params.id;
-
-  // fetch data
+import { cache } from "react";
+import { ImageGrid } from "./image-grid";
+type Params = Promise<{ id: string | undefined }>;
+const CachedProduct = cache(async (id: string) => {
   const project = await db.project.findUnique({
     where: {
-      id: params.id || "",
+      id: id || "",
     },
     include: {
       images: true,
     },
   });
+  return project;
+});
 
+export async function generateMetadata(props: { params: Params }) {
+  const params = await props.params;
+  const id = params.id;
+  if (!id) {
+    return { title: "Not Found", description: "Err" };
+  }
+  const project = await CachedProduct(id);
   const images =
     project?.images.map((image) => ({
       url: image.imageUrl,
@@ -51,7 +57,8 @@ export async function generateMetadata(
     },
   };
 }
-const Project = async ({ params }: { params: { id: string | undefined } }) => {
+const Project = async (props: { params: Params }) => {
+  const params = await props.params;
   const projectPromise = db.project.findUnique({
     where: {
       id: params.id || "",
@@ -61,7 +68,6 @@ const Project = async ({ params }: { params: { id: string | undefined } }) => {
     },
   });
   const moreProjectsPromise = db.project.findMany({
-    take: 6,
     orderBy: {
       createdAt: "desc",
     },
@@ -102,32 +108,7 @@ const Project = async ({ params }: { params: { id: string | undefined } }) => {
         </h1>
         <p className="text-muted-foreground">{project.description}</p>
       </section>
-      <section className="py-6 space-y-3">
-        <div className="w-full relative max-w-2xl aspect-[4/3]  ">
-          <Image
-            src={project.images[0].imageUrl}
-            className="w-full object-cover object-center aspect-[4/3]  rounded-xl "
-            alt="test"
-            priority
-            fill
-          />
-        </div>
-        <div className="sm:grid-cols-2 grid gap-3">
-          {project.images
-            .filter((image) => image.thumbnail !== project.mainImage)
-            .map((image) => (
-              <Image
-                key={image.id}
-                src={image.imageUrl}
-                className="w-full aspect-[4/3] object-cover rounded-xl "
-                alt="test"
-                width={500}
-                priority
-                height={375}
-              />
-            ))}
-        </div>
-      </section>
+      <ImageGrid images={project.images} />
       <hr />
       <section className="py-6  space-y-6">
         <div className="flex justify-between items-center">

@@ -19,7 +19,12 @@ export const ProjectCard = ({
   return (
     <Link href={`/projects/${id}`} className="block cursor-pointer">
       <Card className="overflow-hidden aspect-[4/3] max-w-2xl w-full  relative group">
-        <Image src={mainImage} alt="test"  className="object-cover object-center" fill  />
+        <Image
+          src={mainImage}
+          alt="test"
+          className="object-cover object-center"
+          fill
+        />
 
         <div className="absolute grid items-end px-3 pb-3  bg-gradient-to-t from-black/65 inset-0 text-white">
           <div>
@@ -27,7 +32,7 @@ export const ProjectCard = ({
               {name}
               <ChevronRight className="size-4 mt-1 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 duration-300 transition-all" />
             </h4>
-            <p className="text-xs">{description}</p>
+            <p className="text-xs line-clamp-1">{description}</p>
           </div>
         </div>
       </Card>

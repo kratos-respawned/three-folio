@@ -13,12 +13,10 @@ import { env } from "@/env";
 import { db } from "@/lib/db";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-
-const Admin = async ({
-  searchParams,
-}: {
-  searchParams: { token: string | undefined };
-}) => {
+type Searchparams = Promise<{ token: string | undefined }>;
+const Admin = async (props: { searchParams: Searchparams }) => {
+  const params = await props.searchParams;
+  const searchParams = params;
   if (!searchParams.token || searchParams.token !== env.TOKEN) {
     notFound();
   }
@@ -55,8 +53,8 @@ const Admin = async ({
         </p>
       </section>
       <section className="py-6 space-y-3">
-        <div className="flex justify-between items-center">
-          <h4 className="text-2xl font-semibold">Projects</h4>
+        <div className="flex justify-between items-center relative">
+          <h4 className="text-2xl font-semibold ">Projects</h4>
           <NewProject token={searchParams.token} />
         </div>
         <div className="grid sm:grid-cols-2 gap-4 sm:gap-2 pt-5">

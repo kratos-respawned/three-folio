@@ -27,10 +27,10 @@
     "imagekit": "^5.1.0",
     "jiti": "^1.21.6",
     "lucide-react": "^0.427.0",
-    "next": "15.0.0-rc.0",
+    "next": "^15.0.3",
     "prisma": "^5.18.0",
-    "react": "19.0.0-rc-f994737d14-20240522",
-    "react-dom": "19.0.0-rc-f994737d14-20240522",
+    "react": "^19.0.0-rc.1",
+    "react-dom": "^19.0.0-rc.1",
     "react-hook-form": "^7.52.2",
     "server-only": "^0.0.1",
     "tailwind-merge": "^2.5.2",
@@ -47,7 +47,7 @@
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "eslint": "^8",
-    "eslint-config-next": "15.0.0-rc.0"
+    "eslint-config-next": "^15.0.3"
   },
   "packageManager": "bun@1.1.24"
 }

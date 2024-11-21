@@ -28,14 +28,14 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "min-h-screen bg-background text-foreground relative h-full font-sans antialiased max-w-2xl mx-auto py-12 sm:py-24 px-6",
+          "min-h-screen bg-background text-foreground overflow-hidden w-full relative h-full font-sans antialiased max-w-2xl mx-auto pt-12 sm:pt-24 px-6",
           geistSans.variable,
           geistMono.variable
         )}
       >
         {children}
         <Toaster />
-        <footer className="absolute flex flex-col items-center  justify-center left-1/2 w-fit -translate-x-1/2  mx-auto  bottom-4">
+        {/* <footer className="absolute flex flex-col items-center  justify-center left-1/2 w-fit -translate-x-1/2  mx-auto  bottom-4">
           <p>Made with ❤️</p>
           <Link
             target="_blank"
@@ -45,7 +45,7 @@ export default function RootLayout({
           >
             @kratos-respawned
           </Link>
-        </footer>
+        </footer> */}
       </body>
     </html>
   );

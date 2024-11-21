@@ -7,8 +7,8 @@ import { db } from "@/lib/db";
 import { cn } from "@/lib/utils";
 import { FileVideo, Library, Youtube } from "lucide-react";
 import Link from "next/link";
-export const dynamic="auto"
-export const revalidate=3600
+export const dynamic = "auto";
+export const revalidate = 3600;
 export default async function Home() {
   const projects = await db.project.findMany({
     take: 4,
@@ -34,10 +34,7 @@ export default async function Home() {
             </div>
 
             <Avatar className="size-28 border">
-              <AvatarImage
-                alt="Deepak Bhandari"
-                src={"https://avatars.githubusercontent.com/u/87561983?v=4"}
-              />
+              <AvatarImage alt="Deepak Bhandari" src={"/profile.jpg"} />
               <AvatarFallback>DB</AvatarFallback>
             </Avatar>
           </div>
@@ -48,11 +45,12 @@ export default async function Home() {
         <p className=" max-w-full text-pretty font-sans  text-muted-foreground ">
           I am a 3D Animator with 3 years of experience in the field. I have
           worked on various projects and have a strong understanding of the
-          animation process. I am proficient in Maya, Blender, and Adobe After
-          Effects. I have a keen eye for detail and am passionate about creating
-          high-quality animations. I am a team player and have excellent
-          communication skills. I am looking for new opportunities to further
-          develop my skills and work on exciting projects
+          animation process. I am proficient in 3ds Max, Blender and Unreal
+          engine . I have a keen eye for detail and am passionate about creating
+          high-quality visualisations. I have 1 year of industry experience. I
+          have excellent communication skills. I am looking for new
+          opportunities to further develop my skills and work on
+          exciting projects.
         </p>
       </section>
       <section id="experience">
