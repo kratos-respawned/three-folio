@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Icons } from "./Icons";
 import { Card, CardContent } from "./ui/card";
 import OrbitingCircles from "./ui/orbiting-circle";
@@ -43,7 +44,7 @@ export function SkillsOrbit() {
         delay={20}
         reverse
       >
-        <Icons.autodesk />
+        <Image src="/3ds.png" width={100} height={100} alt="maya" />
       </OrbitingCircles>
     </div>
   );
@@ -54,7 +55,7 @@ export const SkillsSection = () => {
     <div className="grid  max-[500px]:grid-cols-2  min-[500px]:hidden gap-4">
       <Card className="">
         <CardContent className="pt-6  grid place-items-center">
-          <Icons.autodesk className="w-16" />
+          <Image src="/3ds.png" width={64} height={64} alt="maya" />
           <span className="sr-only">Autodesk</span>
         </CardContent>
       </Card>
