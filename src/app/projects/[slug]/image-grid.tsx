@@ -1,27 +1,26 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { YouTubeEmbed } from "@next/third-parties/google";
 import Image from "next/image";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
-type imageProps = {
-  id: string;
-  fileId: string;
-  name: string;
-  filePath: string;
-  imageUrl: string;
-  height: number;
-  width: number;
-  thumbnail: string;
-  projectId: string | null;
-};
-export const ImageGrid = ({ images }: { images: imageProps[] }) => {
+export const ImageGrid = ({
+  images,
+  videoId,
+}: {
+  images: string[];
+  videoId: string | undefined;
+}) => {
   const [activeImage, setActiveImage] = useState(images[0]);
+  const imageRef = useRef<HTMLImageElement>(null);
   return (
     <section className="py-6 space-y-3">
+      {videoId ? <YouTubeEmbed videoid={videoId} /> : null}
       <div className="w-full relative max-w-2xl h-full mx-auto overflow-hidden ">
         <Image
-          src={activeImage.imageUrl}
+          ref={imageRef}
+          src={activeImage}
           className="w-full object-contain border-black border-2 rounded-lg  "
           alt="test"
           width={800}
@@ -31,13 +30,17 @@ export const ImageGrid = ({ images }: { images: imageProps[] }) => {
       </div>
       <div className="sm:grid-cols-2 grid gap-3">
         {images.map((image) => (
-          <div key={image.id} className="relative overflow-hidden rounded-lg">
+          <div key={image} className="relative overflow-hidden rounded-lg">
             <Image
-              onClick={() => setActiveImage(image)}
-              src={image.imageUrl}
+              onClick={() => {
+                setActiveImage(image);
+                imageRef.current?.scrollIntoView({ behavior: "smooth" });
+                // open new tab with image
+              }}
+              src={image}
               className={cn(
-                "w-full object-contain rounded-lg",
-                activeImage.id === image.id
+                "w-full  h-full object-cover rounded-lg",
+                activeImage === image
                   ? " pointer-events-none"
                   : "cursor-pointer"
               )}
@@ -46,7 +49,7 @@ export const ImageGrid = ({ images }: { images: imageProps[] }) => {
               priority
               height={375}
             />
-            {activeImage.id === image.id && (
+            {activeImage === image && (
               <div className="absolute inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center"></div>
             )}
           </div>

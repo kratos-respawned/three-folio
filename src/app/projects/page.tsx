@@ -7,22 +7,35 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { db } from "@/lib/db";
+import { client } from "@/lib/sanity";
 import { Metadata } from "next";
+import { groq, SanityDocument } from "next-sanity";
 import Link from "next/link";
-export const dynamic="auto"
-export const revalidate=3600
 export const metadata: Metadata = {
-  title: 'Projects | Deepak Bhandari',
-  description: 'A collection of projects I have worked on',
-}
- 
+  title: "Projects | Deepak Bhandari",
+  description: "A collection of projects I have worked on",
+};
+const allProjectsQuery = groq`*[_type == "post" ] | order(orderRank) {
+  title,
+  slug,
+  description,
+  mainImage {
+    asset-> {
+      url,
+      "imageUrl": url + "?w=624&h=428&fit=crop"
+    }
+  }
+}`;
 const Projects = async () => {
-  const projects = await db.project.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+  const projects = await client.fetch<SanityDocument[]>(
+    allProjectsQuery,
+    {},
+    {
+      next: {
+        tags: ["all-projects"],
+      },
+    }
+  );
   return (
     <main className=" pb-11 ">
       <header>
@@ -48,7 +61,13 @@ const Projects = async () => {
           <p className="text-muted-foreground">No projects found</p>
         )}
         {projects.map((project) => (
-          <ProjectCard key={project.id} {...project} />
+          <ProjectCard
+            id={project.slug.current}
+            key={project.slug.current}
+            name={project.title}
+            description={project.description}
+            mainImage={project.mainImage.asset.imageUrl}
+          />
         ))}
       </section>
     </main>

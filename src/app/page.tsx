@@ -7,15 +7,27 @@ import { db } from "@/lib/db";
 import { cn } from "@/lib/utils";
 import { FileVideo, Library, Youtube } from "lucide-react";
 import Link from "next/link";
+import { client } from "@/lib/sanity";
+import { groq, SanityDocument } from "next-sanity";
 export const dynamic = "auto";
-export const revalidate = 3600;
+const options = {
+  next: {
+    tags: ["projects-list"],
+  },
+};
+const postQuery = groq`*[_type == "post"] | order(orderRank) [0...4] {
+  title,
+  slug,
+  description,
+  mainImage {
+    asset->{
+      url,
+      "imageUrl": url + "?w=624&h=428&fit=crop"
+    }
+  }
+}`;
 export default async function Home() {
-  const projects = await db.project.findMany({
-    take: 4,
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+  const projects = await client.fetch<SanityDocument[]>(postQuery, {}, options);
   return (
     <main className="flex flex-col  space-y-10">
       <section id="hero">
@@ -108,7 +120,7 @@ export default async function Home() {
         </div>
       </section>
       <section id="skills">
-        <div className="space-y-12 w-full py-12">
+        <div className="max-sm:space-y-8 w-full py-5">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="space-y-2">
               <div className="inline-block rounded-lg bg-foreground text-background px-3 py-1 text-sm">
@@ -128,7 +140,7 @@ export default async function Home() {
         </div>
       </section>
       <section id="work">
-        <div className=" w-full py-12 pb-0">
+        <div className=" w-full py-5 pb-0">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="space-y-2">
               <div className="inline-block rounded-lg bg-foreground text-background px-3 py-1 text-sm">
@@ -149,7 +161,13 @@ export default async function Home() {
               <p className="text-muted-foreground">No projects found</p>
             )}
             {projects.map((project) => (
-              <ProjectCard key={project.id} {...project} />
+              <ProjectCard
+                id={project.slug.current}
+                key={project.slug.current}
+                name={project.title}
+                description={project.description}
+                mainImage={project.mainImage.asset.imageUrl}
+              />
             ))}
           </div>
           <Link
@@ -164,7 +182,7 @@ export default async function Home() {
         </div>
       </section>
       <section id="contact">
-        <div className="grid items-center justify-center gap-4 px-4 text-center md:px-6 w-full py-12">
+        <div className="grid items-center justify-center gap-4 px-4 text-center md:px-6 w-full py-5">
           <div className="space-y-3">
             <div className="inline-block rounded-lg bg-foreground text-background px-3 py-1 text-sm">
               Contact
@@ -182,8 +200,7 @@ export default async function Home() {
               >
                 with a direct question on instagram
               </Link>{" "}
-              and I&apos;ll respond whenever I can. I will ignore all
-              soliciting.
+              and I&apos;ll respond whenever I can.
             </p>
           </div>
         </div>
@@ -191,7 +208,3 @@ export default async function Home() {
     </main>
   );
 }
-
-// I&apos;ve worked on a variety of projects, from simple models to
-//                 3d animations and interior design. Here are a few of my
-//                 favorites.
