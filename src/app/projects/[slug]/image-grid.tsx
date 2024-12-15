@@ -21,7 +21,7 @@ export const ImageGrid = ({
         <Image
           ref={imageRef}
           src={activeImage}
-          className="w-full object-contain border-black border-2 rounded-lg  "
+          className="h-[450px] sticky object-contain border-black border-2 rounded-lg  "
           alt="test"
           width={800}
           height={600}
@@ -39,7 +39,7 @@ export const ImageGrid = ({
               }}
               src={image}
               className={cn(
-                "w-full  h-full object-cover rounded-lg",
+                "sm:max-h-[200px] object-contain bg-white rounded-lg",
                 activeImage === image
                   ? " pointer-events-none"
                   : "cursor-pointer"

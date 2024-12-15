@@ -158,7 +158,7 @@ const Project = async (props: { params: Params }) => {
               <ChevronRight className="size-4 group-hover:translate-x-1.5 transition-transform" />
             </Link>
           </div>
-          <div className="px-12">
+          <div className="max-md:px-12">
             <Carousel
               opts={{
                 align: "start",
@@ -169,13 +169,13 @@ const Project = async (props: { params: Params }) => {
                 {moreProjects
                   .sort(() => Math.random() - 0.5)
                   .map((p) => (
-                    <CarouselItem key={p.slug.current} className="sm:basis-1/2">
+                    <CarouselItem key={p.slug.current} className="md:basis-1/2">
                       <ProjectCard
-                        id={project.slug.current}
-                        key={project.slug.current}
-                        name={project.title}
-                        description={project.description}
-                        mainImage={project.mainImage.asset.imageUrl}
+                        id={p.slug.current}
+                        key={p.slug.current}
+                        name={p.title}
+                        description={p.description}
+                        mainImage={p.mainImage.asset.imageUrl}
                       />
                     </CarouselItem>
                   ))}
