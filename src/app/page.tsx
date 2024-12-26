@@ -3,12 +3,12 @@ import { SkillsOrbit, SkillsSection } from "@/components/skills-orbit";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { db } from "@/lib/db";
 import { cn } from "@/lib/utils";
 import { FileVideo, Library, Youtube } from "lucide-react";
 import Link from "next/link";
 import { client } from "@/lib/sanity";
 import { groq, SanityDocument } from "next-sanity";
+export const runtime = "edge";
 export const dynamic = "auto";
 const options = {
   next: {

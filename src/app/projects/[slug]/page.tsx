@@ -28,7 +28,7 @@ type Params = Promise<{ slug: string | undefined }>;
 const projectQuery = groq`*[_type == "post" && slug.current == $slug][0] {
   title,
   description,
-  video,
+  videoId,
   mainImage {
     asset-> {
       "imageUrl": url + "?w=800&h=600&fit=crop"
@@ -134,14 +134,7 @@ const Project = async (props: { params: Params }) => {
         <p className="text-muted-foreground ">{project.description}</p>
       </section>
 
-      <ImageGrid
-        images={images}
-        videoId={
-          project.video && project.video.video
-            ? project.video.video.id
-            : undefined
-        }
-      />
+      <ImageGrid images={images} videoId={project.videoId} />
       <hr />
       {moreProjects && moreProjects.length > 0 ? (
         <section className="py-6  space-y-6">

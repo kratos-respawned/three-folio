@@ -10,7 +10,7 @@ export const ImageGrid = ({
   videoId,
 }: {
   images: string[];
-  videoId: string | undefined;
+  videoId: string | undefined | null;
 }) => {
   const [activeImage, setActiveImage] = useState(images[0]);
   const imageRef = useRef<HTMLImageElement>(null);
