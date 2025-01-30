@@ -36,6 +36,7 @@ const Projects = async () => {
       },
     }
   );
+  console.log(projects);
   return (
     <main className=" pb-11 ">
       <header>
@@ -60,10 +61,11 @@ const Projects = async () => {
         {projects.length === 0 && (
           <p className="text-muted-foreground">No projects found</p>
         )}
+
         {projects.map((project) => (
           <ProjectCard
-            id={project.slug.current}
-            key={project.slug.current}
+            id={project.slug?.current || "404"}
+            key={project.slug?.current || "404"}
             name={project.title}
             description={project.description}
             mainImage={project.mainImage.asset.imageUrl}
