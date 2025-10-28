@@ -36,7 +36,6 @@ const Projects = async () => {
       },
     }
   );
-  console.log(projects);
   return (
     <main className=" pb-11 ">
       <header>
