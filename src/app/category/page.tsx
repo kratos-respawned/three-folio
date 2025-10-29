@@ -7,7 +7,9 @@ import {
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Card } from "@/components/ui/card";
+import { siteConfigImages } from "@/constant";
 import { client } from "@/lib/sanity";
+import { categoryToTitle } from "@/lib/utils";
 import { groq } from "next-sanity";
 import Image from "next/image";
 import Link from "next/link";
@@ -33,11 +35,6 @@ const Categories = async () => {
         }
     );
 
-    const toSlug = (s: string) =>
-        s
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, "-")
-            .replace(/(^-|-$)/g, "");
 
     return (
         <main className=" pb-11 ">
@@ -65,19 +62,19 @@ const Categories = async () => {
                     <p className="text-muted-foreground">No categories found</p>
                 )}
                 {categories.map((cat) => {
-                    const hrefSlug = cat.slug ?? toSlug(cat.title);
+                    const hrefSlug = cat.title;
                     return (
                         <Link key={hrefSlug} href={`/category/${hrefSlug}`} className="block cursor-pointer">
                             <Card className="overflow-hidden aspect-[4/3] max-w-2xl w-full relative group">
                                 <Image
-                                    src={"/next.svg"}
+                                    src={siteConfigImages[cat.title as keyof typeof siteConfigImages]}
                                     alt={cat.title}
                                     className="object-cover object-center opacity-70"
                                     fill
                                 />
                                 <div className="absolute grid items-end px-3 pb-3 bg-gradient-to-t from-black/65 inset-0 text-white">
                                     <div>
-                                        <h4 className="text-base font-semibold">{cat.title}</h4>
+                                        <h4 className="text-base font-semibold">{categoryToTitle(cat.title)}</h4>
                                         {cat.description ? (
                                             <p className="text-xs line-clamp-1">{cat.description}</p>
                                         ) : null}

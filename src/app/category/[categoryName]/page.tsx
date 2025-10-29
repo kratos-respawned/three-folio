@@ -8,6 +8,7 @@ import {
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { client } from "@/lib/sanity";
+import { categoryToTitle } from "@/lib/utils";
 import { groq, SanityDocument } from "next-sanity";
 import Link from "next/link";
 
@@ -16,7 +17,7 @@ type Params = Promise<{ categoryName: string | undefined }>;
 const categoriesQuery = groq`*[_type == "category"]{
   _id,
   title,
-  "slug": slug.current
+  slug
 }`;
 
 const byCategoryQuery = groq`*[_type == "post" && references($categoryId)] | order(orderRank) {
@@ -32,64 +33,51 @@ const byCategoryQuery = groq`*[_type == "post" && references($categoryId)] | ord
 }`;
 
 export async function generateStaticParams() {
-    const categories = await client.fetch<{ title: string; slug?: string }[]>(
+    const categories = await client.fetch<{ title: string }[]>(
         categoriesQuery,
         {},
         {
             next: { revalidate: 60 },
         }
     );
-    const toSlug = (s: string) =>
-        s
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, "-")
-            .replace(/(^-|-$)/g, "");
-    return categories.map((c) => ({ categoryName: c.slug ?? toSlug(c.title) }));
+    return categories
+        .filter((c) => Boolean(c.title))
+        .map((c) => ({ categoryName: c.title }));
 }
 
 export async function generateMetadata(props: { params: Params }) {
     const params = await props.params;
-    const slug = params.categoryName;
-    if (!slug) return { title: "Category" };
-    const categories = await client.fetch<{ _id: string; title: string; slug?: string }[]>(
+    const title = params.categoryName;
+    if (!title) return { title: "Category" };
+    const categories = await client.fetch<{ _id: string; title: string }[]>(
         categoriesQuery,
         {},
         { next: { revalidate: 60 } }
     );
-    const toSlug = (s: string) =>
-        s
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, "-")
-            .replace(/(^-|-$)/g, "");
-    const cat = categories.find((c) => c.slug === slug || toSlug(c.title) === slug);
+    const cat = categories.find((c) => c.title === title);
     return {
-        title: `${cat?.title ?? slug} | Category`,
-        description: `Projects in ${cat?.title ?? slug} category`,
+        title: `${categoryToTitle(cat?.title ?? title ?? "")} | Category`,
+        description: `Projects in ${categoryToTitle(cat?.title ?? title ?? "")} category`,
     };
 }
 
 const CategoryPage = async (props: { params: Params }) => {
     const params = await props.params;
-    const slug = params.categoryName;
+    const title = params.categoryName;
 
-    const categories = await client.fetch<{ _id: string; title: string; slug?: string }[]>(
+    const categories = await client.fetch<{ _id: string; title: string }[]>(
         categoriesQuery,
         {},
         { next: { revalidate: 60 } }
     );
-    const toSlug = (s: string) =>
-        s
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, "-")
-            .replace(/(^-|-$)/g, "");
-    const category = categories.find((c) => c.slug === slug || toSlug(c.title) === slug);
+    const category = categories.find((c) => c.title === title);
 
     const projects = await client.fetch<SanityDocument[]>(
         byCategoryQuery,
-        { categoryId: category?._id ?? "__nope__" },
+        { categoryId: category?._id as string ?? "__nope__" },
         {
             next: {
-                tags: ["category-projects", slug ?? "unknown-category"],
+                tags: ["category-projects", title ?? "unknown-category"],
             },
         }
     );
@@ -112,13 +100,13 @@ const CategoryPage = async (props: { params: Params }) => {
                         </BreadcrumbItem>
                         <BreadcrumbSeparator />
                         <BreadcrumbItem>
-                            <BreadcrumbPage>{category?.title ?? slug}</BreadcrumbPage>
+                            <BreadcrumbPage>{category?.title ?? title}</BreadcrumbPage>
                         </BreadcrumbItem>
                     </BreadcrumbList>
                 </Breadcrumb>
             </header>
             <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl pt-3">
-                {category?.title ?? slug}
+                {categoryToTitle(category?.title ?? title ?? "")}
             </h2>
             <section className="mt-12 grid sm:grid-cols-2 gap-2">
                 {projects.length === 0 && (

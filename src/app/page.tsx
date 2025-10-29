@@ -1,52 +1,49 @@
-import { ProjectCard } from "@/components/project-card";
 import { SkillsOrbit, SkillsSection } from "@/components/skills-orbit";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+import { categoryToTitle, cn } from "@/lib/utils";
 import { FileVideo, Library, Youtube } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { client } from "@/lib/sanity";
 import { groq, SanityDocument } from "next-sanity";
-export const runtime = "edge";
-export const dynamic = "auto";
+import {  siteConfigImages } from "@/constant";
+
 const options = {
   next: {
     tags: ["projects-list"],
   },
 };
-const postQuery = groq`*[_type == "post"] | order(orderRank) [0...4] {
+const categoriesQuery = groq`*[_type == "category"] | order(title asc) {
   title,
-  slug,
-  description,
-  mainImage {
-    asset->{
-      url,
-      "imageUrl": url + "?w=624&h=428&fit=crop"
-    }
-  }
+  "slug": slug.current,
+  description
 }`;
 export default async function Home() {
-  const projects = await client.fetch<SanityDocument[]>(postQuery, {}, options);
+  const categories = await client.fetch<SanityDocument[]>(
+    categoriesQuery,
+    {},
+    options
+  );
+  
   return (
-    <main className="flex flex-col  space-y-10">
+    <main className="flex flex-col   space-y-10">
       <section id="hero">
         <div className="mx-auto w-full max-w-2xl space-y-8">
           <div className="gap-2 flex justify-between">
             <div className="flex-col flex flex-1 space-y-1.5">
-              <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
+              <h1 className="text-3xl font-bold grayscale tracking-tighter sm:text-5xl xl:text-6xl/none">
                 Hi, I&apos;m Deepak 👋
               </h1>
 
               <p className="max-w-[600px] md:text-xl">
-                Passionate 3D Animator crafting vivid, immersive worlds.
-                Bringing stories to life with meticulous detail and boundless
-                creativity.
+              Product & Architectural Visualizer crafting realistic and engaging 3D visuals.
               </p>
             </div>
 
             <Avatar className="size-28 border">
-              <AvatarImage alt="Deepak Bhandari" src={"/profile.jpg"} />
+              <AvatarImage alt="Deepak Bhandari" className="grayscale" src={"/profile.jpeg"} />
               <AvatarFallback>DB</AvatarFallback>
             </Avatar>
           </div>
@@ -55,14 +52,8 @@ export default async function Home() {
       <section id="about">
         <h2 className="text-xl font-bold">About</h2>
         <p className=" max-w-full text-pretty font-sans  text-muted-foreground ">
-          I am a 3D Animator with 3 years of experience in the field. I have
-          worked on various projects and have a strong understanding of the
-          animation process. I am proficient in 3ds Max, Blender and Unreal
-          engine . I have a keen eye for detail and am passionate about creating
-          high-quality visualisations. I have 1 year of industry experience. I
-          have excellent communication skills. I am looking for new
-          opportunities to further develop my skills and work on
-          exciting projects.
+        I’m a 3D Visualizer specializing in product animations and architectural renders. I focus on modeling, texturing, and rendering detailed visuals that help brands and designers showcase their ideas with clarity and impact.
+I mainly work in Blender, and also use Unreal Engine for real-time visualization. With a strong eye for composition and lighting, I aim to create visuals that feel immersive, elegant, and emotionally engaging. I’m always excited to collaborate on new projects that push creative boundaries and bring fresh ideas to life.
         </p>
       </section>
       <section id="experience">
@@ -150,34 +141,45 @@ export default async function Home() {
                 Check out my latest work
               </h2>
               <p className="text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                I&apos;ve worked on a variety of projects, from simple models to
-                3d animations and interior design. Here are a few of my
-                favorites.
+                Discover projects grouped into categories like Archviz and Product viz.
               </p>
             </div>
           </div>
           <div className="mt-12 grid sm:grid-cols-2 gap-2">
-            {projects.length === 0 && (
-              <p className="text-muted-foreground">No projects found</p>
+            {categories.length === 0 && (
+              <p className="text-muted-foreground">No categories found</p>
             )}
-            {projects.map((project) => (
-              <ProjectCard
-                id={project.slug.current}
-                key={project.slug.current}
-                name={project.title}
-                description={project.description}
-                mainImage={project.mainImage.asset.imageUrl}
-              />
-            ))}
+            {categories.filter(cat => Boolean(cat.title)).map((cat) => {
+              const hrefSlug = cat.title;
+              
+              return (
+                <Link key={hrefSlug} href={`/category/${hrefSlug}`} className="block cursor-pointer">
+                  <Card className="overflow-hidden aspect-[4/3] max-w-2xl w-full relative group">
+                    <Image
+                      src={siteConfigImages[cat.title as keyof typeof siteConfigImages]}
+                      alt={cat.title}
+                      className="object-cover object-center opacity-70"
+                      fill
+                    />
+                    <div className="absolute grid items-end px-3 pb-3 bg-gradient-to-t from-black/65 inset-0 text-white">
+                      <div>
+                        <h4 className="text-base font-semibold ">{categoryToTitle(cat.title)}</h4>
+                        
+                      </div>
+                    </div>
+                  </Card>
+                </Link>
+              );
+            })}
           </div>
           <Link
-            href="/projects"
+            href="/category"
             className={cn(
               buttonVariants({ variant: "link" }),
               "ml-auto block w-fit text-blue-500 "
             )}
           >
-            and many more...
+            browse all categories...
           </Link>
         </div>
       </section>
@@ -191,16 +193,23 @@ export default async function Home() {
               Get in Touch
             </h2>
             <p className="mx-auto max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-              Want to chat? Just shoot me a dm{" "}
+              Want to chat? Email me at {" "}
+              <Link
+                href={"mailto:3deepak277@gmail.com"}
+                className="text-blue-500 hover:underline"
+              >
+                3deepak277@gmail.com
+              </Link>{" "}
+              or connect on {" "}
               <Link
                 target="_blank"
                 referrerPolicy="no-referrer"
-                href={"https://www.instagram.com/deepak_bhandari_27/"}
+                href={"https://www.linkedin.com/in/deepak-bhandari-700a58276"}
                 className="text-blue-500 hover:underline"
               >
-                with a direct question on instagram
-              </Link>{" "}
-              and I&apos;ll respond whenever I can.
+                LinkedIn
+              </Link>
+              .
             </p>
           </div>
         </div>
@@ -208,3 +217,8 @@ export default async function Home() {
     </main>
   );
 }
+
+
+
+
+
