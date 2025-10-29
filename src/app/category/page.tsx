@@ -13,7 +13,7 @@ import { categoryToTitle } from "@/lib/utils";
 import { groq } from "next-sanity";
 import Image from "next/image";
 import Link from "next/link";
-
+export const revalidate = 60;
 export const metadata = {
     title: "Categories | Deepak Bhandari",
     description: "Browse projects by category",

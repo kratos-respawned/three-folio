@@ -32,6 +32,7 @@ const byCategoryQuery = groq`*[_type == "post" && references($categoryId)] | ord
   }
 }`;
 
+export const revalidate = 60;
 export async function generateStaticParams() {
     const categories = await client.fetch<{ title: string }[]>(
         categoriesQuery,
