@@ -7,34 +7,24 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { siteQueries } from "@/constant";
 import { client } from "@/lib/sanity";
 import { Metadata } from "next";
 import { groq, SanityDocument } from "next-sanity";
+import { cacheLife, cacheTag } from "next/cache";
 import Link from "next/link";
 export const metadata: Metadata = {
   title: "Projects | Deepak Bhandari",
   description: "A collection of projects I have worked on",
 };
-const allProjectsQuery = groq`*[_type == "post" ] | order(orderRank) {
-  title,
-  slug,
-  description,
-  mainImage {
-    asset-> {
-      url,
-      "imageUrl": url + "?w=624&h=428&fit=crop"
-    }
-  }
-}`;
+
 const Projects = async () => {
+  "use cache"
+  cacheLife("hours")
+  cacheTag(siteQueries.allProjects.cacheTag);
   const projects = await client.fetch<SanityDocument[]>(
-    allProjectsQuery,
+    siteQueries.allProjects.query,
     {},
-    {
-      next: {
-        tags: ["all-projects"],
-      },
-    }
   );
   return (
     <main className=" pb-11 ">
@@ -63,6 +53,7 @@ const Projects = async () => {
 
         {projects.map((project) => (
           <ProjectCard
+          categoryName={project.category?.[0]?.title}
             id={project.slug?.current || "404"}
             key={project.slug?.current || "404"}
             name={project.title}

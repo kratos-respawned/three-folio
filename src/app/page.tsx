@@ -2,31 +2,13 @@ import { SkillsOrbit, SkillsSection } from "@/components/skills-orbit";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { categoryToTitle, cn } from "@/lib/utils";
+import {  cn } from "@/lib/utils";
 import { FileVideo, Library, Youtube } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
-import { client } from "@/lib/sanity";
-import { groq, SanityDocument } from "next-sanity";
-import {  siteConfigImages } from "@/constant";
+import { Suspense } from "react";
+import { CategoriesList, CategoriesSkeleton } from "@/components/categories-list";
 
-const options = {
-  next: {
-    tags: ["projects-list"],
-  },
-};
-const categoriesQuery = groq`*[_type == "category"] | order(title asc) {
-  title,
-  "slug": slug.current,
-  description
-}`;
-export default async function Home() {
-  const categories = await client.fetch<SanityDocument[]>(
-    categoriesQuery,
-    {},
-    options
-  );
-  
+export default function Home() {
   return (
     <main className="flex flex-col   space-y-10">
       <section id="hero">
@@ -145,33 +127,9 @@ I mainly work in Blender, and also use Unreal Engine for real-time visualization
               </p>
             </div>
           </div>
-          <div className="mt-12 grid sm:grid-cols-2 gap-2">
-            {categories.length === 0 && (
-              <p className="text-muted-foreground">No categories found</p>
-            )}
-            {categories.filter(cat => Boolean(cat.title)).map((cat) => {
-              const hrefSlug = cat.title;
-              
-              return (
-                <Link key={hrefSlug} href={`/category/${hrefSlug}`} className="block cursor-pointer">
-                  <Card className="overflow-hidden aspect-[4/3] max-w-2xl w-full relative group">
-                    <Image
-                      src={siteConfigImages[cat.title as keyof typeof siteConfigImages]}
-                      alt={cat.title}
-                      className="object-cover object-center opacity-70"
-                      fill
-                    />
-                    <div className="absolute grid items-end px-3 pb-3 bg-gradient-to-t from-black/65 inset-0 text-white">
-                      <div>
-                        <h4 className="text-base font-semibold ">{categoryToTitle(cat.title)}</h4>
-                        
-                      </div>
-                    </div>
-                  </Card>
-                </Link>
-              );
-            })}
-          </div>
+          <Suspense fallback={<CategoriesSkeleton />}>
+            <CategoriesList />
+          </Suspense>
           <Link
             href="/category"
             className={cn(

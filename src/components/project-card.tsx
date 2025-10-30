@@ -8,16 +8,19 @@ type ProjectCardProps = {
   name: string;
   description: string;
   mainImage: string;
+  categoryName: string;
 };
 
 export const ProjectCard = ({
   id,
+  categoryName,
   name,
   description,
   mainImage,
 }: ProjectCardProps) => {
+  const href = `/category/${categoryName}/${id}`;
   return (
-    <Link href={`/projects/${id}`} className="block cursor-pointer">
+    <Link href={href} scroll={true} className="block cursor-pointer">
       <Card className="overflow-hidden aspect-[4/3] max-w-2xl w-full  relative group">
         <Image
           src={mainImage}

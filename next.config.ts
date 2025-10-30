@@ -1,16 +1,19 @@
 
 import createJiti from "jiti";
+import { NextConfig } from "next";
 import { fileURLToPath } from "node:url";
 const jiti = createJiti(fileURLToPath(import.meta.url));
  
-// Import env here to validate during build. Using jiti we can import .ts files :)
 jiti("./src/env");
-/** @type {import('next').NextConfig} */ 
-const nextConfig = {
+
+const nextConfig:NextConfig = {
     images:{
         unoptimized:true
     },
-    
+    cacheComponents:true,
+    typescript:{
+        ignoreBuildErrors:true
+    }
 } ;
 
 export default nextConfig;

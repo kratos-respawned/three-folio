@@ -7,35 +7,21 @@ import {
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Card } from "@/components/ui/card";
-import { siteConfigImages } from "@/constant";
+import { siteConfigImages, siteQueries } from "@/constant";
 import { client } from "@/lib/sanity";
 import { categoryToTitle } from "@/lib/utils";
-import { groq } from "next-sanity";
 import Image from "next/image";
 import Link from "next/link";
-export const revalidate = 60;
+import { fetchCategories } from "./fetchCategory";
+import { cacheTag } from "next/cache";
 export const metadata = {
-    title: "Categories | Deepak Bhandari",
+    title: "Categories | Deepak Bhandari Portfolio",
     description: "Browse projects by category",
 };
-
-const categoriesQuery = groq`*[_type == "category"] | order(title asc) {
-  title,
-  _id,
-  "slug": slug.current,
-  description
-}`;
-
-const Categories = async () => {
-    const categories = await client.fetch<{ title: string; slug?: string; description?: string }[]>(
-        categoriesQuery,
-        {},
-        {
-            next: { tags: ["all-categories"], revalidate: 60 },
-        }
-    );
-
-
+export default async function CategoryPage() {
+    "use cache"
+    const categories = await fetchCategories();
+    cacheTag(siteQueries.categories.cacheTag+"-page");
     return (
         <main className=" pb-11 ">
             <header>
@@ -75,9 +61,6 @@ const Categories = async () => {
                                 <div className="absolute grid items-end px-3 pb-3 bg-gradient-to-t from-black/65 inset-0 text-white">
                                     <div>
                                         <h4 className="text-base font-semibold">{categoryToTitle(cat.title)}</h4>
-                                        {cat.description ? (
-                                            <p className="text-xs line-clamp-1">{cat.description}</p>
-                                        ) : null}
                                     </div>
                                 </div>
                             </Card>
@@ -89,6 +72,5 @@ const Categories = async () => {
     );
 };
 
-export default Categories;
 
 

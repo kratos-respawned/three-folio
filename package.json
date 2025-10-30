@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "check":"tsc --noEmit",
+    "check": "tsc --noEmit",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -21,6 +21,7 @@
     "@radix-ui/react-toast": "^1.2.1",
     "@sanity/image-url": "^1.1.0",
     "@t3-oss/env-nextjs": "^0.11.0",
+    "@types/minimatch": "^6.0.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "embla-carousel-react": "^8.1.8",
@@ -28,6 +29,7 @@
     "jiti": "^1.21.6",
     "lucide-react": "^0.427.0",
     "next": "^16.0.1",
+    "next-devtools-mcp": "^0.2.3",
     "next-sanity": "^9.8.27",
     "prisma": "^5.18.0",
     "react": "^19.2.0",
